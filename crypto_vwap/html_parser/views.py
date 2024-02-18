@@ -51,6 +51,10 @@ def modify_csv_file(csv_file):
             asset = ''
         return filled, asset
 
+    # Function to remove 'usdt' from the columns
+    def remove_usdt(data):
+        return data.replace('USDT', '')
+
     # Open the CSV file for reading and writing
     with open(csv_file, 'r', newline='') as infile, open('temp.csv', 'w', newline='') as outfile:
         reader = csv.DictReader(infile)
@@ -70,13 +74,18 @@ def modify_csv_file(csv_file):
             # Update the 'filled' column with the numeric part
             row['Filled'] = filled
             row['Asset'] = asset  # Add the 'asset' column with the string part
+
+            # Remove 'usdt' from 'Fees' and 'Realized Profit' columns
+            row['Fees'] = remove_usdt(row['Fees'])
+            row['Realized Profit'] = remove_usdt(row['Realized Profit'])
+
             # Write the modified row to the temporary CSV file
             writer.writerow(row)
 
     # Replace the original CSV file with the modified one
     os.replace('temp.csv', csv_file)
 
-    print("CSV file successfully modified with the 'asset' column.")
+    print("CSV file successfully modified with the 'asset' column and 'usdt' removed from 'Fees' and 'Realized Profit' columns.")
 
 
 def download_csv_file(request):
