@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>File Upload Success</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success Page</title>
 </head>
 <body>
-    <h2>File Uploaded Successfully</h2>
-    <!-- You can provide a link or additional instructions here -->
+    <h1>File Successfully Converted</h1>
+    <p>Your file has been successfully converted. You can download the CSV file using the link below:</p>
+    <a href="{% url 'download_csv_file' %}">Download CSV</a>
 </body>
 </html>
