@@ -1,6 +1,5 @@
-Time,Side,Sub-wallet,Type,Average,Filled,Fees,Realized Profit
-
- , , , , , , , 
-2024-01-0900:38:30,Sell,USDT Wallet,Market,8.538,13.9 AR,0.08 USDT,3.18 USDT
-2024-01-0900:38:30,Sell,USDT Wallet,Market,8.539,85.3 AR,0.44 USDT,19.62 USDT
-2023-11-1523:44:18,Buy,USDT Wallet,Market,1.1523,508.5 ARB,0.36 USDT,0.00 USDT
+Time,Side,Sub-wallet,Type,Asset,Average,Filled,Fees,Realized Profit
+ , , , ,, ,, , 
+2024-01-0900:38:30,Sell,USDT Wallet,Market,AR,8.538,13.9,0.08 USDT,3.18 USDT
+2024-01-0900:38:30,Sell,USDT Wallet,Market,AR,8.539,85.3,0.44 USDT,19.62 USDT
+2023-11-1523:44:18,Buy,USDT Wallet,Market,ARB,1.1523,508.5,0.36 USDT,0.00 USDT
