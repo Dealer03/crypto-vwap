@@ -16,7 +16,11 @@ from .models import Transaction
 import os
 
 
-def upload_file(request):
+def home(request):
+    return render(request, 'home.html')
+
+
+def upload_html_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -41,7 +45,7 @@ def upload_file(request):
             csv_file_url = request.build_absolute_uri(csv_file)
 
             # Pass the URL to the template
-            return render(request, 'file_upload/success.html', {'csv_file_url': csv_file_url})
+            return render(request, 'file_upload/html_success.html', {'csv_file_url': csv_file_url})
     else:
         form = UploadFileForm()
     return render(request, 'file_upload/upload.html', {'form': form})
@@ -125,7 +129,7 @@ def upload_csv_file(request):
             success = False
 
         if success:
-            return render(request, 'file_upload/success.html')
+            return render(request, 'file_upload/csv_success.html')
         else:
             return JsonResponse({'error': error_message}, status=500)
     else:
