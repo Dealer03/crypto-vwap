@@ -1,9 +1,18 @@
 import csv
+import datetime
+import filecmp
+import charset_normalizer
 from django.conf import settings
-from django.http import Http404, HttpResponse, FileResponse
+from django.views.decorators.http import require_POST
+from django.core.files.storage import default_storage
+from django.http import Http404, HttpResponse, FileResponse, JsonResponse
+from django.core.management import call_command
 from django.shortcuts import render
-from .forms import UploadFileForm
-from .parse import parse_html_to_csv
+
+from .utils.import_transactions import import_transactions_from_csv
+from .forms import UploadFileForm, UploadCSVFileForm
+from .utils.parse import parse_html_to_csv
+from .models import Transaction
 import os
 
 
@@ -45,7 +54,7 @@ def modify_csv_file(csv_file):
         if parts:  # Check if parts is not empty
             filled = float(parts[0])  # Assume the first part is always numeric
             # Join the remaining parts as asset
-            asset = ' '.join(parts[1:]) if len(parts) > 1 else ''
+            asset = ''.join(parts[1:]) if len(parts) > 1 else ''
         else:
             filled = ''  # Default value if parts is empty
             asset = ''
@@ -97,3 +106,28 @@ def download_csv_file(request):
             return response
     else:
         raise Http404("File not found")
+
+
+def upload_csv_file(request):
+    if request.method == 'POST':
+        uploaded_file = request.FILES['file']
+        # Save the uploaded file to a specific path
+        file_path = '../temp.csv'
+        with open(file_path, 'wb+') as destination:
+            for chunk in uploaded_file.chunks():
+                destination.write(chunk)
+
+        try:
+            success, error_message = import_transactions_from_csv(file_path)
+        except UnicodeDecodeError as e:
+            # Handle decoding errors by replacing invalid bytes
+            error_message = str(e)
+            success = False
+
+        if success:
+            return render(request, 'file_upload/success.html')
+        else:
+            return JsonResponse({'error': error_message}, status=500)
+    else:
+        form = UploadCSVFileForm()
+    return render(request, 'file_upload/upload_csv.html', {'form': form})

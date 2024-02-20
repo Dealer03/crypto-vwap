@@ -10,3 +10,12 @@ class UploadFileForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', 'Upload'))
+
+
+class UploadCSVFileForm(forms.Form):
+    file = forms.FileField(label='Select s file')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', 'Upload'))

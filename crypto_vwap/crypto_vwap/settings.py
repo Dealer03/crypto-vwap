@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'crispy_forms',
     'crispy_bootstrap5',
-    'html_parser',
+    'html_parser.apps.HtmlParserConfig',
 ]
 
 MIDDLEWARE = [
