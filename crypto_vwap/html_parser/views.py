@@ -116,7 +116,7 @@ def upload_csv_file(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['file']
         # Save the uploaded file to a specific path
-        file_path = '../temp.csv'
+        file_path = './temp.csv'
         with open(file_path, 'wb+') as destination:
             for chunk in uploaded_file.chunks():
                 destination.write(chunk)
