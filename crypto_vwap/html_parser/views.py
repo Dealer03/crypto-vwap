@@ -14,13 +14,15 @@ def home(request):
     return render(request, 'home.html')
 
 
-@login_required
-def upload_files(request):
-    if request.method == 'POST':
-        html_form = UploadFileForm(request.POST, request.FILES)
-        csv_form = UploadCSVFileForm(request.POST, request.FILES)
+def upload_options(request):
+    return render(request, 'file_upload/upload_options.html')
 
-        if html_form.is_valid():
+
+@login_required
+def upload_html_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
             uploaded_file = request.FILES['file']
             with open('temp.html', 'wb+') as destination:
                 for chunk in uploaded_file.chunks():
@@ -34,8 +36,16 @@ def upload_files(request):
 
             csv_file_url = request.build_absolute_uri(csv_file)
             return render(request, 'file_upload/html_success.html', {'csv_file_url': csv_file_url})
+    else:
+        form = UploadFileForm()
+    return render(request, 'file_upload/html_upload.html', {'form': form})
 
-        elif csv_form.is_valid():
+
+@login_required
+def upload_csv_file(request):
+    if request.method == 'POST':
+        form = UploadCSVFileForm(request.POST, request.FILES)
+        if form.is_valid():
             uploaded_file = request.FILES['file']
             file_path = './temp.csv'
             with open(file_path, 'wb+') as destination:
@@ -44,7 +54,7 @@ def upload_files(request):
 
             try:
                 success, error_message = import_transactions_from_csv(
-                    file_path)
+                    file_path, request.user)
             except UnicodeDecodeError as e:
                 error_message = str(e)
                 success = False
@@ -52,13 +62,10 @@ def upload_files(request):
             if success:
                 return render(request, 'file_upload/csv_success.html')
             else:
-                return render(request, 'file_upload/upload_csv.html', {'csv_form': csv_form, 'error_message': error_message})
-
+                return render(request, 'file_upload/csv_upload.html', {'form': form, 'error_message': error_message})
     else:
-        html_form = UploadFileForm()
-        csv_form = UploadCSVFileForm()
-
-    return render(request, 'file_upload/upload_files.html', {'html_form': html_form, 'csv_form': csv_form})
+        form = UploadCSVFileForm()
+    return render(request, 'file_upload/csv_upload.html', {'form': form})
 
 
 @login_required

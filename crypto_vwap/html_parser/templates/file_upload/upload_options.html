@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Upload Options</h1>
+<ul>
+    <li><a href="{% url 'html_upload' %}">Upload HTML File</a></li>
+    <li><a href="{% url 'csv_upload' %}">Upload CSV File</a></li>
+</ul>
+{% endblock %}
