@@ -13,10 +13,30 @@
   </head>
   <body>
     <div class="container">
-      <nav class="nav">
-        <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000">Home</a>
-        <a class="nav-link" href="http://127.0.0.1:8000/upload_html/">Upload HTML</a>
-        <a class="nav-link" href="http://127.0.0.1:8000/upload_csv/">Upload CSV</a>
+      <nav>
+        <ul class="nav">
+          {% if user.is_authenticated %}
+            <li>
+              Hi, {{ user.username }}
+            </li>
+            <!-- <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'dashboard' %}">My Dashboard</a>
+            </li> -->
+            <li class="nav-item">
+              <a href="{% url 'transactions' %}">Transactions</a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'logout' %}">Logout</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'signup' %}">Signup</a>
+            </li>
+          {% endif %}
+        </ul>
       </nav>
     {% block content %}    
     {% endblock content %} 

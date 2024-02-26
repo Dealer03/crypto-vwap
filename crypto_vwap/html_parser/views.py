@@ -4,6 +4,7 @@ import filecmp
 import charset_normalizer
 from django.conf import settings
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.http import Http404, HttpResponse, FileResponse, JsonResponse
 from django.core.management import call_command
@@ -20,6 +21,7 @@ def home(request):
     return render(request, 'home.html')
 
 
+@login_required
 def upload_html_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -51,6 +53,7 @@ def upload_html_file(request):
     return render(request, 'file_upload/upload.html', {'form': form})
 
 
+@login_required
 def modify_csv_file(csv_file):
     # Function to split data in the 'filled' column and add 'asset' column
     def split_filled_column(data):
@@ -101,6 +104,7 @@ def modify_csv_file(csv_file):
     print("CSV file successfully modified with the 'asset' column and 'usdt' removed from 'Fees' and 'Realized Profit' columns.")
 
 
+@login_required
 def download_csv_file(request):
     file_path = os.path.join(settings.BASE_DIR, 'converted_transactions.csv')
     if os.path.exists(file_path):
@@ -112,6 +116,7 @@ def download_csv_file(request):
         raise Http404("File not found")
 
 
+@login_required
 def upload_csv_file(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['file']
