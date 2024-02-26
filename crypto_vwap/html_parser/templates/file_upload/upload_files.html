@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1>Upload Files</h1>
+    
+    <h2>Upload HTML File</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% crispy html_form %}
+    </form>
+
+    <h2>Upload CSV File</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% crispy csv_form %}
+    </form>
+
+    {% if error_message %}
+    <p>{{ error_message }}</p>
+    {% endif %}
+{% endblock content %}

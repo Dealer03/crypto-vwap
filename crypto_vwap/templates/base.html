@@ -19,21 +19,21 @@
             <li>
               Hi, {{ user.username }}
             </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{% url 'dashboard' %}">My Dashboard</a>
-            </li> -->
             <li class="nav-item">
-              <a href="{% url 'transactions' %}">Transactions</a>
+              <a class="nav-link active" aria-current="page" href="{% url 'dashboard' %}">My Dashboard</a>
             </li>
             <li class="nav-item">
-              <a href="{% url 'logout' %}">Logout</a>
+              <a class="nav-link" href="{% url 'upload_files' %}">Processing Center</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'custom_logout' %}">Logout</a>
             </li>
           {% else %}
             <li class="nav-item">
-              <a href="{% url 'login' %}">Login</a>
+              <a class="nav-link" href="{% url 'login' %}">Login</a>
             </li>
             <li class="nav-item">
-              <a href="{% url 'signup' %}">Signup</a>
+              <a class="nav-link" href="{% url 'signup' %}">Signup</a>
             </li>
           {% endif %}
         </ul>
