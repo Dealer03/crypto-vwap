@@ -3,7 +3,7 @@ from datetime import datetime
 from ..models import Transaction  # Import your Transaction model
 
 
-def import_transactions_from_csv(csv_file_path):
+def import_transactions_from_csv(csv_file_path, user):
     try:
         # Read the CSV file using pandas
         df = pd.read_csv(csv_file_path, encoding='ANSI')
@@ -22,6 +22,7 @@ def import_transactions_from_csv(csv_file_path):
 
             # Create or update Transaction object
             transaction = Transaction.objects.create(
+                user=user,
                 date=time.date(),
                 side=row['Side'],
                 sub_wallet=row['Sub-wallet'],
