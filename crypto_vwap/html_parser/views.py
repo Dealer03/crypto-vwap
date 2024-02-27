@@ -73,16 +73,21 @@ def modify_csv_file(csv_file):
     # Function to split data in the 'filled' column and add 'asset' column
     def split_filled_column(data):
         parts = data.split()
-        if parts:  # Check if parts is not empty
-            filled = float(parts[0])  # Assume the first part is always numeric
-            # Join the remaining parts as asset
+        if parts:
+            filled_str = parts[0]  # Extract the numeric part as a string
+        # Try converting the string to a float
+        try:
+            filled = float(filled_str)
+        except ValueError:
+            filled = 0  # Default to 0 if conversion fails
             asset = ''.join(parts[1:]) if len(parts) > 1 else ''
         else:
-            filled = ''  # Default value if parts is empty
+            filled = 0  # Default to 0 if parts is empty
             asset = ''
         return filled, asset
 
     # Function to remove 'usdt' from the columns
+
     def remove_usdt(data):
         return data.replace('USDT', '')
 

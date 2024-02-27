@@ -1,9 +1,42 @@
 {% extends 'base.html' %}
 
+
+{% block title %}
+    Data Processing Center
+{% endblock title %}
+    
+
 {% block content %}
-<h1>Upload Options</h1>
-<ul>
-    <li><a href="{% url 'html_upload' %}">Upload HTML File</a></li>
-    <li><a href="{% url 'csv_upload' %}">Upload CSV File</a></li>
-</ul>
+<div class="card w-75 mb-3">
+    <div class="card-body">
+      <h5 class="card-title">Upload HTML File</h5>
+      <p class="card-text">Upload your html file here to be transformed into a CSV file.</p>
+      <form action="{% url 'html_upload' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Transform</button>
+        </form>
+    </div>
+  </div>
+  
+  <div class="card w-75 mb-3">
+    <div class="card-body">
+      <h5 class="card-title">Upload CSV File</h5>
+      <p class="card-text">Upload you transactions via a CSV file here.</p>
+      <form action="{% url 'csv_upload' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+  </div>
+  <div class="card w-75 mb-3">
+    <div class="card-body">
+      <h5 class="card-title">Remove Duplicate Transactions</h5>
+      <p class="card-text">Clean your data by removing duplicate transactions in your data table.</p>
+      <form action="{% url 'remove_duplicates' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Remove</button>
+      </form>
+    </div>
+  </div>
+
 {% endblock %}

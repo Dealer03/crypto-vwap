@@ -8,4 +8,6 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('transactions/', views.transactions, name='transactions'),
+    path('remove-duplicates/', views.remove_duplicate_transactions,
+         name='remove_duplicates'),
 ]

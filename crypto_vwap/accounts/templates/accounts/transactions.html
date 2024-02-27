@@ -16,7 +16,7 @@
         </thead>
         <tbody>
             {% for transaction in user_transactions %}
-                <tr>
+                <ol><tr>
                     <td>{{ transaction.date }}</td>
                     <td>{{ transaction.side }}</td>
                     <td>{{ transaction.asset }}</td>
@@ -24,7 +24,7 @@
                     <td>{{ transaction.filled }}</td>
                     <td>{{ transaction.fees }}</td>
                     <td>{{ transaction.realized_profit }}</td>
-                </tr>
+                </ol></tr>
             {% endfor %}
         </tbody>
     </table>
