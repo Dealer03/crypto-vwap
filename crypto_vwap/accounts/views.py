@@ -6,6 +6,79 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from html_parser.models import Transaction
 
+import pandas as pd
+import numpy as np
+import plotly.graph_objects as go
+
+
+@login_required
+def dashboard(request):
+    # Retrieve the user's transactions
+    user_transactions = Transaction.objects.filter(user=request.user)
+
+    # Calculate total profit and loss
+    total_profit_loss = sum(
+        transaction.realized_profit for transaction in user_transactions)
+    # Prepare data for the pie chart
+    asset_labels = []
+    asset_values = []
+    total_portfolio_value = sum(
+        transaction.filled * transaction.average for transaction in user_transactions)
+    for transaction in user_transactions:
+        asset_labels.append(transaction.asset)
+        # Calculate percentage
+        asset_values.append(transaction.filled *
+                            transaction.average / total_portfolio_value * 100)
+
+     # Create the pie chart
+    fig_pie = go.Figure(
+        data=[go.Pie(labels=asset_labels, values=asset_values)])
+    fig_pie.update_layout(
+        title='Asset Distribution',
+        title_font=dict(size=24),
+        title_y=1,
+        title_x=0.5,
+        font=dict(family='Arial', size=14),
+        legend=dict(orientation='h', yanchor='bottom',
+                    y=1.02, xanchor='right', x=1),
+        margin=dict(l=20, r=20, t=80, b=20)
+    )
+    fig_pie.update_traces(marker=dict(
+        colors=['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']))  # Custom colors
+
+    # Prepare data for the line graph (total realized profit over time)
+    dates = []
+    total_realized_profit = []
+    for transaction in user_transactions:
+        dates.append(transaction.date)
+        total_realized_profit.append(transaction.realized_profit)
+    fig_line = go.Figure(data=go.Scatter(
+        x=dates, y=total_realized_profit, mode='lines'))
+    fig_line.update_layout(
+        title='Total Realized Profit Over Time',
+        title_font=dict(size=24),
+        title_x=0.5,
+        font=dict(family='Arial', size=14),
+        xaxis=dict(title='Date'),
+        yaxis=dict(title='Total Realized Profit ($)'),
+        margin=dict(l=20, r=20, t=80, b=20)
+    )
+    # Custom color and width for line
+    fig_line.update_traces(line=dict(color='#1f77b4', width=2))
+
+    # Convert the Plotly figures to HTML
+    plot_div_pie = fig_pie.to_html(full_html=False)
+    plot_div_line = fig_line.to_html(full_html=False)
+
+    # Pass the data and visualizations to the template context
+    context = {
+        'plot_div_pie': plot_div_pie,
+        'plot_div_line': plot_div_line,
+        'total_profit_loss': total_profit_loss,
+    }
+
+    return render(request, 'accounts/dashboard.html', context)
+
 
 def signup(request):
     if request.method == 'POST':
@@ -22,15 +95,6 @@ def signup(request):
 def custom_logout(request):
     logout(request)
     return render(request, 'home.html')
-
-
-@login_required
-def dashboard(request):
-    # Retrieve transactions associated with the current user
-    user_transactions = Transaction.objects.filter(user=request.user)
-
-    # Pass the transactions to the dashboard template
-    return render(request, 'accounts/dashboard.html', {'user_transactions': user_transactions})
 
 
 @login_required

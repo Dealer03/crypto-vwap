@@ -1,32 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Welcome to Your Dashboard</h1>
-    <h2>Your Transactions</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Side</th>
-                <th scope="col">Asset</th>
-                <th scope="col">Average</th>
-                <th scope="col">Filled</th>
-                <th scope="col">Fees</th>
-                <th scope="col">Realized Profit</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for transaction in user_transactions %}
-                <tr>
-                    <td>{{ transaction.date }}</td>
-                    <td>{{ transaction.side }}</td>
-                    <td>{{ transaction.asset }}</td>
-                    <td>{{ transaction.average }}</td>
-                    <td>{{ transaction.filled }}</td>
-                    <td>{{ transaction.fees }}</td>
-                    <td>{{ transaction.realized_profit }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div id="pie-chart">
+    {{ plot_div_pie|safe }}
+</div>
+<div id="line-chart">
+    {{ plot_div_line|safe }}
+</div>
+<div>
+    <p>Total Profit/Loss: ${{ total_profit_loss }}</p>
+</div>
 {% endblock %}
