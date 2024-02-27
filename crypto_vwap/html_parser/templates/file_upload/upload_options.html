@@ -21,7 +21,7 @@
   <div class="card w-75 mb-3">
     <div class="card-body">
       <h5 class="card-title">Upload For Analysis</h5>
-      <p class="card-text">Upload your transactions via a .csv file here.</p>
+      <p class="card-text">Upload your transactions via an .csv file here.</p>
       <form action="{% url 'csv_upload' %}" method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-primary">Upload</button>
