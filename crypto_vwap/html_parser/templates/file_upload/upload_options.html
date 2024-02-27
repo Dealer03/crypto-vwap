@@ -9,8 +9,8 @@
 {% block content %}
 <div class="card w-75 mb-3">
     <div class="card-body">
-      <h5 class="card-title">Upload HTML File</h5>
-      <p class="card-text">Upload your html file here to be transformed into a CSV file.</p>
+      <h5 class="card-title">Transform .HTML to .CSV</h5>
+      <p class="card-text">Upload your .html file here to transform it into a downloadable .csv file.</p>
       <form action="{% url 'html_upload' %}" method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-primary">Transform</button>
@@ -20,8 +20,8 @@
   
   <div class="card w-75 mb-3">
     <div class="card-body">
-      <h5 class="card-title">Upload CSV File</h5>
-      <p class="card-text">Upload you transactions via a CSV file here.</p>
+      <h5 class="card-title">Upload For Analysis</h5>
+      <p class="card-text">Upload your transactions via a .csv file here.</p>
       <form action="{% url 'csv_upload' %}" method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-primary">Upload</button>
@@ -31,7 +31,7 @@
   <div class="card w-75 mb-3">
     <div class="card-body">
       <h5 class="card-title">Remove Duplicate Transactions</h5>
-      <p class="card-text">Clean your data by removing duplicate transactions in your data table.</p>
+      <p class="card-text">Clean your data to increase accuracy by removing duplicate transactions in your records.</p>
       <form action="{% url 'remove_duplicates' %}" method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-primary">Remove</button>

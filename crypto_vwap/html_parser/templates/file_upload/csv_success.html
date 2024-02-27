@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
-<h1>File Successfully Converted</h1>
-<p>Your file has been successfully saved to a database!</p>
+<div>
+    <h1>File Successfully Converted</h1>
+    <h2>Your file has been successfully saved to a database!</h2>
+</div>
+<a href="{% url 'upload_options' %}" class="btn btn-primary btn-lg">Back to Data Processing Center</a>
+
+<a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg">Back to My Dashboard</a>
 {% endblock content %}
-    
