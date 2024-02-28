@@ -1,17 +1,20 @@
 {% extends 'base.html' %}
+{% load static %}
+<script src="{% static 'your_app/script.js' %}"></script>
 
 {% block content %}
     <h2>Your Transactions</h2>
-    <table class="table">
+    <table id="transactionTable" class="table">
         <thead>
             <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Side</th>
-                <th scope="col">Asset</th>
-                <th scope="col">Average</th>
-                <th scope="col">Filled</th>
-                <th scope="col">Fees</th>
-                <th scope="col">Realized Profit</th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=date&sort_order={{ sort_order }}">Date</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=side&sort_order={{ sort_order }}">Side</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=asset&sort_order={{ sort_order }}">Asset</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=average&sort_order={{ sort_order }}">Average</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=filled&sort_order={{ sort_order }}">Filled</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=fees&sort_order={{ sort_order }}">Fees</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=realized_profit&sort_order={{ sort_order }}">Realized Profit</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=volume&sort_order={{ sort_order }}">Volume</a></th>
             </tr>
         </thead>
         <tbody>
@@ -24,6 +27,7 @@
                     <td>{{ transaction.filled }}</td>
                     <td>{{ transaction.fees }}</td>
                     <td>{{ transaction.realized_profit }}</td>
+                    <td>{{ transaction.volume }}</td>
                 </tr>
             {% endfor %}
         </tbody>

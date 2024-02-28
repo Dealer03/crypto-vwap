@@ -99,11 +99,17 @@ def custom_logout(request):
 
 @login_required
 def transactions(request):
-    # Retrieve transactions associated with the current user
-    user_transactions = Transaction.objects.filter(user=request.user)
+    sort_column = request.GET.get('sort_column', 'date')
+    sort_order = request.GET.get('sort_order', 'asc')
 
-    # Pass the transactions to the dashboard template
-    return render(request, 'accounts/transactions.html', {'user_transactions': user_transactions})
+    if sort_order == 'asc':
+        sort_column = sort_column
+    else:
+        sort_column = '-' + sort_column
+
+    sorted_transactions = Transaction.objects.all().order_by(sort_column)
+
+    return render(request, 'transactions.html', {'user_transactions': sorted_transactions})
 
 
 def remove_duplicate_transactions(request):
