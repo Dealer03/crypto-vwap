@@ -10,4 +10,7 @@ urlpatterns = [
     path('transactions/', views.transactions, name='transactions'),
     path('remove-duplicates/', views.remove_duplicate_transactions,
          name='remove_duplicates'),
+    path('delete/', views.delete_all_transactions,
+         name='delete_all_transactions'),
+
 ]

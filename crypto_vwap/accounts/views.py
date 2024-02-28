@@ -1,4 +1,5 @@
 from django.db.models import Count, Min
+from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -114,10 +115,19 @@ def transactions(request):
 
 def delete_all_transactions(request):
     if request.method == 'POST':
-        # Delete all transactions
-        Transaction.objects.all().delete()
+        try:
+            # Delete all transactions
+            Transaction.objects.all().delete()
+            # Add success message
+            messages.success(
+                request, 'All transactions have been deleted successfully.')
+        except Exception as e:
+            # Add error message
+            messages.error(
+                request, f'An error occurred while deleting transactions: {e}')
+
         # Redirect to transaction list page
-        return redirect('accounts/transactions')
+        return redirect('upload_options')
 
     return render(request, 'delete_all_transactions.html')
 
