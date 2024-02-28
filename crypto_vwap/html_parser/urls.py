@@ -6,4 +6,5 @@ urlpatterns = [
     path('upload/', views.upload_options, name='upload_options'),
     path('upload/html/', views.upload_html_file, name='html_upload'),
     path('upload/csv/', views.upload_csv_file, name='csv_upload'),
+    path('download/', views.download_csv_file, name='download_csv_file')
 ]

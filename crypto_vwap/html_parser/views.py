@@ -14,27 +14,37 @@ def home(request):
     return render(request, 'home.html')
 
 
+@login_required
 def upload_options(request):
     return render(request, 'file_upload/upload_options.html')
 
 
-@login_required
 def upload_html_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
+            # Process the uploaded file
             uploaded_file = request.FILES['file']
-            with open('temp.html', 'wb+') as destination:
+            file_path = 'temp.html'
+            # Save the uploaded file temporarily with .html extension
+            with open(file_path, 'wb+') as destination:
                 for chunk in uploaded_file.chunks():
                     destination.write(chunk)
 
+            # Convert HTML to CSV
             csv_file = 'converted_transactions.csv'
             parse_html_to_csv('temp.html', csv_file)
+
+            # Delete temporary HTML file
             os.remove('temp.html')
 
+            # Modify the generated CSV file to add the 'asset' column
             modify_csv_file(csv_file)
 
+            # Get the URL of the modified CSV file
             csv_file_url = request.build_absolute_uri(csv_file)
+
+            # Pass the URL to the template
             return render(request, 'file_upload/html_success.html', {'csv_file_url': csv_file_url})
     else:
         form = UploadFileForm()
@@ -68,26 +78,20 @@ def upload_csv_file(request):
     return render(request, 'file_upload/csv_upload.html', {'form': form})
 
 
-@login_required
 def modify_csv_file(csv_file):
     # Function to split data in the 'filled' column and add 'asset' column
     def split_filled_column(data):
         parts = data.split()
-        if parts:
-            filled_str = parts[0]  # Extract the numeric part as a string
-        # Try converting the string to a float
-        try:
-            filled = float(filled_str)
-        except ValueError:
-            filled = 0  # Default to 0 if conversion fails
+        if parts:  # Check if parts is not empty
+            filled = float(parts[0])  # Assume the first part is always numeric
+            # Join the remaining parts as asset
             asset = ''.join(parts[1:]) if len(parts) > 1 else ''
         else:
-            filled = 0  # Default to 0 if parts is empty
+            filled = ''  # Default value if parts is empty
             asset = ''
         return filled, asset
 
     # Function to remove 'usdt' from the columns
-
     def remove_usdt(data):
         return data.replace('USDT', '')
 
@@ -124,7 +128,6 @@ def modify_csv_file(csv_file):
     print("CSV file successfully modified with the 'asset' column and 'usdt' removed from 'Fees' and 'Realized Profit' columns.")
 
 
-@login_required
 def download_csv_file(request):
     file_path = os.path.join(settings.BASE_DIR, 'converted_transactions.csv')
     if os.path.exists(file_path):

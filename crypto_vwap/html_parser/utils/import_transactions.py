@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from ..models import Transaction  # Import your Transaction model
+from ..models import Transaction
 
 
 def import_transactions_from_csv(csv_file_path, user):
