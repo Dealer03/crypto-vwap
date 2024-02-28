@@ -109,7 +109,17 @@ def transactions(request):
 
     sorted_transactions = Transaction.objects.all().order_by(sort_column)
 
-    return render(request, 'transactions.html', {'user_transactions': sorted_transactions})
+    return render(request, 'accounts/transactions.html', {'user_transactions': sorted_transactions})
+
+
+def delete_all_transactions(request):
+    if request.method == 'POST':
+        # Delete all transactions
+        Transaction.objects.all().delete()
+        # Redirect to transaction list page
+        return redirect('accounts/transactions')
+
+    return render(request, 'delete_all_transactions.html')
 
 
 def remove_duplicate_transactions(request):
