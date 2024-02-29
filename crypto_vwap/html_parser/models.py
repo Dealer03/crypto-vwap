@@ -12,7 +12,7 @@ class Transaction(models.Model):
     filled = models.FloatField()
     fees = models.FloatField()
     realized_profit = models.FloatField()
-    # volume = models.DecimalField(max_digits=10, decimal_places=2)
+    volume = models.DecimalField(max_digits=10, decimal_places=2)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 

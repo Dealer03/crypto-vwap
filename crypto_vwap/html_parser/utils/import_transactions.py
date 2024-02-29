@@ -32,6 +32,7 @@ def import_transactions_from_csv(csv_file_path, user):
                 filled=float(row['Filled']),
                 fees=float(row['Fees']),
                 realized_profit=float(row['Realized Profit']),
+                volume=float(row['Volume']),
             )
 
         return True, None  # Return success and no error message

@@ -1,5 +1,6 @@
 import csv
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
@@ -95,8 +96,11 @@ def modify_csv_file(csv_file):
     def remove_usdt(data):
         return data.replace('USDT', '')
 
-    # Open the CSV file for reading and writing
-    with open(csv_file, 'r', newline='') as infile, open('temp.csv', 'w', newline='') as outfile:
+    # List to store modified rows
+    modified_rows = []
+
+    # Open the CSV file for reading
+    with open(csv_file, 'r', newline='') as infile:
         reader = csv.DictReader(infile)
         # Convert fieldnames to list for easier manipulation
         fieldnames = list(reader.fieldnames)
@@ -105,11 +109,13 @@ def modify_csv_file(csv_file):
         # Insert 'Asset' column after 'Type' column
         fieldnames.insert(type_index + 1, 'Asset')
 
-        writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-        writer.writeheader()  # Write the header row
-
         # Process each row in the CSV file
         for row in reader:
+            # Remove commas from specified numeric columns
+            for column in ['Realized Profit', 'Volume', 'Filled', 'Average']:
+                if column in row:
+                    row[column] = row[column].replace(',', '')
+
             filled, asset = split_filled_column(row['Filled'])
             # Update the 'filled' column with the numeric part
             row['Filled'] = filled
@@ -118,14 +124,24 @@ def modify_csv_file(csv_file):
             # Remove 'usdt' from 'Fees' and 'Realized Profit' columns
             row['Fees'] = remove_usdt(row['Fees'])
             row['Realized Profit'] = remove_usdt(row['Realized Profit'])
+            # Remove 'usdt' from volume column
+            row['Volume'] = remove_usdt(row['Volume'])
 
-            # Write the modified row to the temporary CSV file
+            modified_rows.append(row)
+
+    # Open the temporary CSV file for writing
+    with open('temp.csv', 'w', newline='') as outfile:
+        writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+        writer.writeheader()  # Write the header row
+
+        # Write the modified rows to the temporary CSV file
+        for row in modified_rows:
             writer.writerow(row)
 
     # Replace the original CSV file with the modified one
     os.replace('temp.csv', csv_file)
 
-    print("CSV file successfully modified with the 'asset' column and 'usdt' removed from 'Fees' and 'Realized Profit' columns.")
+    print("CSV file successfully modified with the 'asset' column and 'usdt' removed from 'Fees', 'Realized Profit', and 'Volume' columns.")
 
 
 def download_csv_file(request):
