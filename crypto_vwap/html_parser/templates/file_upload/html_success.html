@@ -2,8 +2,22 @@
 
 
 {% block content %}
-<h1>File Successfully Converted</h1>
-<p>Your file has been successfully converted. You can download the CSV file using the link below:</p>
-<a href="{% url 'download_csv_file' %}">Download CSV</a>
+<div>
+    <h1>File Successfully Converted</h1>
+    <p>Your file has been successfully converted. You can download the CSV file using the link below:</p>
+</div>
+<div class="container">
+    <div class="container my-auto p-2">
+    <div>
+        <a href="{% url 'download_csv_file' %}" class="btn btn-success btn-lg">Download CSV</a>
+    </div>
+    </div>
+    <div class="container my-auto p-2">
+    <div>
+        <a href="{% url 'upload_options' %}" class="btn btn-primary btn-lg">Back to Data Processing Center</a>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg">Back to My Dashboard</a>
+    </div>
+    </div>
+</div>
 {% endblock content %}
     

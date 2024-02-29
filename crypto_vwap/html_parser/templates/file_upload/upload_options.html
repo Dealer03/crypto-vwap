@@ -44,7 +44,7 @@
       <p class="card-text">Are you sure you want to delete all transactions?</p>
       <form action="{% url 'delete_all_transactions' %}" method="post">
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary">Reset</button>
+        <button type="submit" class="btn btn-danger">Reset</button>
       </form>
     </div>
   </div>
