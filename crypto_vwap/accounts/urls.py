@@ -12,5 +12,12 @@ urlpatterns = [
          name='remove_duplicates'),
     path('delete/', views.delete_all_transactions,
          name='delete_all_transactions'),
-
+    path('reset_password/', views.CustomPasswordResetView.as_view(),
+         name='reset_password'),
+    path('reset_password_done/', views.CustomPasswordResetDoneView.as_view(),
+         name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(),
+         name='password_reset_confirm'),
+    path('reset_password_complete/', views.CustomPasswordResetCompleteView.as_view(),
+         name='password_reset_complete'),
 ]
