@@ -34,16 +34,18 @@ def dashboard(request):
 
      # Create the pie chart
     fig_pie = go.Figure(
-        data=[go.Pie(labels=asset_labels, values=asset_values)])
+        data=[go.Pie(labels=asset_labels, values=asset_values, hole=.3)])
     fig_pie.update_layout(
         title='Asset Distribution',
-        title_font=dict(size=24),
+        paper_bgcolor='#1A1E21',
+        title_font=dict(size=24, color="white"),
+        title_pad_t=7,
         title_y=1,
         title_x=0.5,
-        font=dict(family='Arial', size=14),
-        legend=dict(orientation='h', yanchor='bottom',
-                    y=1.02, xanchor='right', x=1),
-        margin=dict(l=20, r=20, t=80, b=20)
+        font=dict(family='Arial', size=14, color="white"),
+        legend=dict(itemclick=False, orientation='v', yanchor='top',
+                    y=.98, xanchor='right', x=1),
+        margin=dict(l=10, r=10, t=30, b=10),
     )
     fig_pie.update_traces(marker=dict(
         colors=['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']))  # Custom colors
@@ -54,29 +56,39 @@ def dashboard(request):
     for transaction in user_transactions:
         dates.append(transaction.date)
         total_realized_profit.append(transaction.realized_profit)
-    fig_line = go.Figure(data=go.Scatter(
-        x=dates, y=total_realized_profit, mode='lines'))
-    fig_line.update_layout(
+
+    fig_bar = go.Figure()
+    fig_bar.add_trace(go.Bar(x=dates, y=total_realized_profit,
+                             base=0,  # Base starts from 0
+                             # Color based on positive/negative values
+                             marker_color=[
+                                 'green' if x >= 0 else 'red' for x in total_realized_profit],
+                             name='Total Realized Profit'))
+
+    fig_bar.update_layout(
         title='Total Realized Profit Over Time',
-        title_font=dict(size=24),
+        paper_bgcolor='#1A1E21',
+        title_font=dict(size=24, color="white"),
         title_x=0.5,
-        font=dict(family='Arial', size=14),
+        title_pad_t=7,
+        font=dict(family='Arial', size=14, color='white'),
         xaxis=dict(title='Date'),
         yaxis=dict(title='Total Realized Profit ($)'),
         margin=dict(l=20, r=20, t=80, b=20)
     )
-    # Custom color and width for line
-    fig_line.update_traces(line=dict(color='#1f77b4', width=2))
 
     # Convert the Plotly figures to HTML
     plot_div_pie = fig_pie.to_html(full_html=False)
-    plot_div_line = fig_line.to_html(full_html=False)
+    plot_div_bar = fig_bar.to_html(full_html=False)
+
+    # Truncate total_profit_loss to 2 decimal places
+    truncated_profit_loss = "{:.2f}".format(total_profit_loss)
 
     # Pass the data and visualizations to the template context
     context = {
         'plot_div_pie': plot_div_pie,
-        'plot_div_line': plot_div_line,
-        'total_profit_loss': total_profit_loss,
+        'plot_div_bar': plot_div_bar,
+        'truncated_profit_loss': truncated_profit_loss,
     }
 
     return render(request, 'accounts/dashboard.html', context)
@@ -187,7 +199,22 @@ def remove_duplicate_transactions(request):
         ).delete()[0]
 
         # Return an HTTP response with the count of deleted objects
-        return HttpResponse(f"{num_duplicates_removed} duplicate transactions were removed.")
+        response = (
+            "<style>"
+            "body { background-color: #1A1E21; color: #ffffff; }"
+            "p { margin-bottom: 10px; font-size: 30px; font-weight: bold; color: #ffffff; }"
+            "</style>"
+            f"<p>{num_duplicates_removed} duplicate transactions were removed.</p>"
+        )
+        # Return an HTTP response with the count of deleted objects
+        return HttpResponse(response)
     else:
         # Return an HTTP response indicating that only POST requests are allowed
-        return HttpResponse("This view only accepts POST requests.")
+        response = (
+            "<style>"
+            "body { background-color: #1A1E21; color: #ffffff; }"
+            "p { margin-bottom: 10px; font-size: 30px; font-weight: bold; color: #ffffff; }"
+            "</style>"
+            "<p>This view only accepts POST requests.</p>"
+        )
+    return HttpResponse(response)

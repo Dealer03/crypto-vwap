@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div id="pie-chart">
+<div>
+    <p class="fs-2 fw-bold text-uppercase text-light bg-dark">Total Profit/Loss: ${{ truncated_profit_loss }}</p>
+</div>
+<div class="p-auto" id="pie-chart">
     {{ plot_div_pie|safe }}
 </div>
-<div id="line-chart">
-    {{ plot_div_line|safe }}
-</div>
-<div>
-    <p>Total Profit/Loss: ${{ total_profit_loss }}</p>
+<div class="p-auto" id="bar-chart">
+    {{ plot_div_bar|safe }}
 </div>
 {% endblock %}
