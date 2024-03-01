@@ -1,4 +1,4 @@
-from django.db.models import Count, Min
+from django.db.models import Count, Min, F
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -68,6 +68,7 @@ def dashboard(request):
     fig_bar.update_layout(
         title='Total Realized Profit Over Time',
         paper_bgcolor='#1A1E21',
+        plot_bgcolor='#1A1E21',
         title_font=dict(size=24, color="white"),
         title_x=0.5,
         title_pad_t=7,
@@ -134,14 +135,25 @@ def transactions(request):
     sort_column = request.GET.get('sort_column', 'date')
     sort_order = request.GET.get('sort_order', 'asc')
 
+    # Toggle the sort order
     if sort_order == 'asc':
         sort_column = sort_column
+        next_sort_order = 'desc'
     else:
         sort_column = '-' + sort_column
+        next_sort_order = 'asc'
 
+    # Retrieve the sorted transactions based on the specified column and order
     sorted_transactions = Transaction.objects.all().order_by(sort_column)
 
-    return render(request, 'accounts/transactions.html', {'user_transactions': sorted_transactions})
+    # Pass the sorted transactions and sort order to the template
+    context = {
+        'user_transactions': sorted_transactions,
+        'sort_column': sort_column,
+        'next_sort_order': next_sort_order,
+    }
+
+    return render(request, 'accounts/transactions.html', context)
 
 
 def delete_all_transactions(request):

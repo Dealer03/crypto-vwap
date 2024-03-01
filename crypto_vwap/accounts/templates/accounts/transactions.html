@@ -7,14 +7,14 @@
     <table id="transactionTable" class="table">
         <thead>
             <tr>
-                <th scope="col"><a href="{% url 'transactions' %}?sort_column=date&sort_order={{ sort_order }}">Date</a></th>
-                <th scope="col"><a href="{% url 'transactions' %}?sort_column=side&sort_order={{ sort_order }}">Side</a></th>
-                <th scope="col"><a href="{% url 'transactions' %}?sort_column=asset&sort_order={{ sort_order }}">Asset</a></th>
-                <th scope="col"><a href="{% url 'transactions' %}?sort_column=average&sort_order={{ sort_order }}">Average</a></th>
-                <th scope="col"><a href="{% url 'transactions' %}?sort_column=filled&sort_order={{ sort_order }}">Filled</a></th>
-                <th scope="col"><a href="{% url 'transactions' %}?sort_column=fees&sort_order={{ sort_order }}">Fees</a></th>
-                <th scope="col"><a href="{% url 'transactions' %}?sort_column=realized_profit&sort_order={{ sort_order }}">Realized Profit</a></th>
-                <th scope="col"><a href="{% url 'transactions' %}?sort_column=volume&sort_order={{ sort_order }}">Volume</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=date&sort_order={{ next_sort_order }}">Date</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=side&sort_order={{ next_sort_order}}">Side</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=asset&sort_order={{ next_sort_order }}">Asset</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=average&sort_order={{ next_sort_order }}">Average</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=filled&sort_order={{ next_sort_order }}">Filled</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=fees&sort_order={{ next_sort_order }}">Fees</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=realized_profit&sort_order={{ next_sort_order }}">Realized Profit</a></th>
+                <th scope="col"><a href="{% url 'transactions' %}?sort_column=volume&sort_order={{ next_sort_order }}">Volume</a></th>
             </tr>
         </thead>
         <tbody>
