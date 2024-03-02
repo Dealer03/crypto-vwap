@@ -1,13 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div>
-    <p class="fs-2 fw-bold text-uppercase text-light bg-dark">Total Profit/Loss: ${{ truncated_profit_loss }}</p>
+{% if truncated_profit_loss > truncated_base_zero %}
+<div class="row">
+    <div class="col-7 fs-2 fw-bold text-secondary text-uppercase text-end">Total Profit/Loss: </div>
+    <div class="col-3 fs-2 fw-bold text-success text-uppercase bg-dark text-start">${{ truncated_profit_loss }}</div>
 </div>
-<div class="p-auto" id="pie-chart">
-    {{ plot_div_pie|safe }}
+{% elif truncated_profit_loss < truncated_base_zero %}
+<div class="row">
+    <div class="col-7 fs-2 fw-bold text-secondary text-uppercase text-end">Total Profit/Loss: </div>
+    <div class="col-3 fs-2 fw-bold text-danger text-uppercase bg-dark text-start">${{ truncated_profit_loss }}</div>
+</div>   
+{% else %}
+<div class="row">
+    <div class="col-7 fs-2 fw-bold text-secondary text-uppercase text-end">Total Profit/Loss: </div>
+    <div class="col-3 fs-2 fw-bold text-light text-uppercase bg-dark text-start">${{ truncated_profit_loss }}</div>
+</div> 
+{% endif %}
+
+<div class="vstack gap-3">
+    <div class="p-auto" id="pie-chart">
+        {{ plot_div_pie|safe }}
+    </div>
+    <div class="p-auto" id="bar-chart">
+        {{ plot_div_bar|safe }}
+    </div>
 </div>
-<div class="p-auto" id="bar-chart">
-    {{ plot_div_bar|safe }}
-</div>
+
 {% endblock %}

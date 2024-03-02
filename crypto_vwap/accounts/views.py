@@ -45,7 +45,8 @@ def dashboard(request):
         font=dict(family='Arial', size=14, color="white"),
         legend=dict(itemclick=False, orientation='v', yanchor='top',
                     y=.98, xanchor='right', x=1),
-        margin=dict(l=10, r=10, t=30, b=10),
+        margin=dict(l=10, r=10, t=50, b=10),
+        height=575,
     )
     fig_pie.update_traces(marker=dict(
         colors=['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']))  # Custom colors
@@ -75,7 +76,8 @@ def dashboard(request):
         font=dict(family='Arial', size=14, color='white'),
         xaxis=dict(title='Date'),
         yaxis=dict(title='Total Realized Profit ($)'),
-        margin=dict(l=20, r=20, t=80, b=20)
+        margin=dict(l=20, r=20, t=80, b=20),
+        height=700,
     )
 
     # Convert the Plotly figures to HTML
@@ -85,11 +87,18 @@ def dashboard(request):
     # Truncate total_profit_loss to 2 decimal places
     truncated_profit_loss = "{:.2f}".format(total_profit_loss)
 
+    # Comparator
+    base_zero = 0.00
+
+    # Truncate total_profit_loss to 2 decimal places
+    truncated_base_zero = "{:.2f}".format(base_zero)
+
     # Pass the data and visualizations to the template context
     context = {
         'plot_div_pie': plot_div_pie,
         'plot_div_bar': plot_div_bar,
         'truncated_profit_loss': truncated_profit_loss,
+        'truncated_base_zero': truncated_base_zero,
     }
 
     return render(request, 'accounts/dashboard.html', context)

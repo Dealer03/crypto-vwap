@@ -14,7 +14,7 @@
                 <th scope="col"><a href="{% url 'transactions' %}?sort_column=filled&sort_order={{ next_sort_order }}">Filled</a></th>
                 <th scope="col"><a href="{% url 'transactions' %}?sort_column=fees&sort_order={{ next_sort_order }}">Fees</a></th>
                 <th scope="col"><a href="{% url 'transactions' %}?sort_column=realized_profit&sort_order={{ next_sort_order }}">Realized Profit</a></th>
-                <th scope="col"><a href="{% url 'transactions' %}?sort_column=volume&sort_order={{ next_sort_order }}">Volume</a></th>
+                <!-- <th scope="col"><a href="{% url 'transactions' %}?sort_column=volume&sort_order={{ next_sort_order }}">Volume</a></th> -->
             </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@
                     <td>{{ transaction.filled }}</td>
                     <td>{{ transaction.fees }}</td>
                     <td>{{ transaction.realized_profit }}</td>
-                    <td>{{ transaction.volume }}</td>
+                    <!-- <td>{{ transaction.volume }}</td> -->
                 </tr>
             {% endfor %}
         </tbody>
