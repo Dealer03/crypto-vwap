@@ -24,4 +24,5 @@ urlpatterns = [
     path('', include('html_parser.urls')),
     path('', include('accounts.urls')),
     path('send-test-email/', send_test_email, name='send_test_email'),
+    path('transaction_stats/', include('transaction_stats.urls')),
 ]

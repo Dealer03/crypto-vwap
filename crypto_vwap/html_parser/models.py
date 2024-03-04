@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
@@ -17,23 +18,49 @@ class Transaction(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    @classmethod
+    def weighted_average_price(cls, asset):
+        # Get all transactions for the specified asset
+        transactions = cls.objects.filter(asset=asset)
 
-@classmethod
-def weighted_average_price(cls, asset):
-    transactions = cls.objects.filter(asset=asset)
-    total_volume = transactions.aggregate(Sum('volume'))['volume__sum']
-    if total_volume:
-        weighted_sum = sum(transaction.average *
-                           transaction.volume for transaction in transactions)
-        return weighted_sum / total_volume
-    return 0
+        # Calculate the weighted sum of average prices and total filled quantity
+        weighted_sum = sum(float(transaction.average) *
+                           float(transaction.filled) for transaction in transactions)
+        total_filled_quantity = transactions.aggregate(total_filled=Sum('filled'))[
+            'total_filled'] or Decimal('0')
 
+        # Calculate the weighted average price
+        if total_filled_quantity != Decimal('0'):
+            weighted_average_price = weighted_sum / total_filled_quantity
+        else:
+            weighted_average_price = Decimal('0')
 
-@classmethod
-def current_holdings(cls, asset):
-    total_filled = cls.objects.filter(
-        asset=asset).aggregate(Sum('filled'))['filled__sum']
-    return total_filled or 0
+        weighted_average_price = "{:.2f}".format(weighted_average_price)
+
+        return weighted_average_price
+
+    @classmethod
+    def current_holdings(cls, asset):
+        total_filled = cls.objects.filter(
+            asset=asset).aggregate(Sum('filled'))['filled__sum']
+        return total_filled or 0
+
+    @classmethod
+    def get_current_holdings(cls, asset):
+        # Filtering buy transactions where realized profit is 0.0
+        buys = cls.objects.filter(asset=asset, realized_profit=0.0).aggregate(
+            total_buy_filled=Sum('filled'))['total_buy_filled'] or 0
+
+        # Filtering sell transactions where realized profit is not 0.0
+        sells = cls.objects.filter(asset=asset).exclude(realized_profit=0.0).aggregate(
+            total_sell_filled=Sum('filled'))['total_sell_filled'] or 0
+
+        # Calculating current holdings
+        current_holdings = buys - sells
+
+        current_holdings = Decimal('{:.2f}'.format(current_holdings))
+
+        return current_holdings
 
 
 def __str__(self):

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Holdings</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Asset</th>
+                <th scope="col">Current Holdings</th>
+                <th scope="col">Weighted Average Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for asset, holdings, weighted_average_price in holdings_data %}
+                
+                {% if holdings >= 1 %}
+                <tr>
+                    <td scope="row">{{ asset }}</td>
+                    <td scope="row">{{ holdings }}</td>
+                    <td scope="row">{{ weighted_average_price }}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

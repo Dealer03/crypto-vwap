@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'html_parser.apps.HtmlParserConfig',
     'accounts',
+    'transaction_stats',
 ]
 
 MIDDLEWARE = [
