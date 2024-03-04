@@ -1,3 +1,4 @@
+import csv
 from django.db.models import Count, Min, F
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -253,3 +254,28 @@ def remove_duplicate_transactions(request):
             "<p>This view only accepts POST requests.</p>"
         )
     return HttpResponse(response)
+
+
+def export_transactions_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="transactions.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Date', 'Side', 'Asset', 'Average',
+                    'Filled', 'Fees', 'Realized Profit', 'Volume'])
+
+    # Assuming transactions are associated with users
+    transactions = Transaction.objects.filter(user=request.user)
+    for transaction in transactions:
+        writer.writerow([
+            transaction.date,
+            transaction.side,
+            transaction.asset,
+            transaction.average,
+            transaction.filled,
+            transaction.fees,
+            transaction.realized_profit,
+            transaction.volume,
+        ])
+
+    return response

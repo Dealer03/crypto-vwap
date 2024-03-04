@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Sum
 
 
 class Transaction(models.Model):
@@ -16,5 +17,24 @@ class Transaction(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f"{self.date} - {self.side}"
+
+@classmethod
+def weighted_average_price(cls, asset):
+    transactions = cls.objects.filter(asset=asset)
+    total_volume = transactions.aggregate(Sum('volume'))['volume__sum']
+    if total_volume:
+        weighted_sum = sum(transaction.average *
+                           transaction.volume for transaction in transactions)
+        return weighted_sum / total_volume
+    return 0
+
+
+@classmethod
+def current_holdings(cls, asset):
+    total_filled = cls.objects.filter(
+        asset=asset).aggregate(Sum('filled'))['filled__sum']
+    return total_filled or 0
+
+
+def __str__(self):
+    return f"{self.date} - {self.side}"

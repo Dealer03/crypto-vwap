@@ -20,4 +20,6 @@ urlpatterns = [
          name='password_reset_confirm'),
     path('reset_password_complete/', views.CustomPasswordResetCompleteView.as_view(),
          name='password_reset_complete'),
+    path('export-transactions-csv/', views.export_transactions_csv,
+         name='export_transactions_csv'),
 ]
