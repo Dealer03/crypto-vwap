@@ -159,11 +159,3 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 LOGIN_REDIRECT_URL = '/dashboard/'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.fallback.FallbackStorage'
-
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'efrainpalencia85@gmail.com'  # Replace with your Gmail address
-# Replace with your Gmail password or app password
-EMAIL_HOST_PASSWORD = 'UPdKDdFBZvRWY6'
