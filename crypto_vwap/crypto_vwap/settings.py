@@ -159,3 +159,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 LOGIN_REDIRECT_URL = '/dashboard/'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.fallback.FallbackStorage'
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://crypto-vwap-production.up.railway.app/'
+]
