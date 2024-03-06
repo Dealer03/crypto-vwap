@@ -1,1 +1,1 @@
-web: gunicorn 'crypto_vwap.wsgi'
+web: gunicorn 'crypto_vwap.wsgi.application'
