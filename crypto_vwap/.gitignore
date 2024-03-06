@@ -1,2 +1,12 @@
 /converted_transactions.csv
 /temp.csv
+
+.env/
+.venv/
+env/
+venv/
+*.env
+
+*.pyc
+db.sqlite3
+staticfiles/

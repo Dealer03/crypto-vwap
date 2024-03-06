@@ -1,1 +1,1 @@
-web: gunicorn 'crypto_vwap.wsgi.application'
+web: python manage.py migrate && gunicorn crypto_vwap.wsgi
