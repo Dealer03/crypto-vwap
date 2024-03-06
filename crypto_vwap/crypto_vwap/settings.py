@@ -161,5 +161,6 @@ LOGIN_REDIRECT_URL = '/dashboard/'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.fallback.FallbackStorage'
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://crypto-vwap-production.up.railway.app/'
+    'https://*.crypto-vwap-production.up.railway.app/',
+    'http://*.crypto-vwap-production.up.railway.app/',
 ]

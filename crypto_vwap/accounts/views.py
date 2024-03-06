@@ -1,10 +1,8 @@
 import csv
-from django.db.models import Count, Min, F
 from django.contrib import messages
-from django.contrib.auth import login, logout
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.forms import UserCreationForm
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -12,8 +10,6 @@ from django.shortcuts import render, redirect
 from html_parser.models import Transaction
 from .forms import SignUpForm
 
-import pandas as pd
-import numpy as np
 import plotly.graph_objects as go
 
 
