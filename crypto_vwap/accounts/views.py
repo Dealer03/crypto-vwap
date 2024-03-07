@@ -258,11 +258,13 @@ def remove_duplicate_transactions(request):
 
 def export_transactions_csv(request):
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="transactions.csv"'
+    response['Content-Disposition'] = 'attachment; filename="crypto_transactions.csv"'
 
     writer = csv.writer(response)
     writer.writerow(['Date', 'Side', 'Asset', 'Average',
                     'Filled', 'Fees', 'Realized Profit', 'Volume'])
+
+    writer.writerow([])
 
     # Assuming transactions are associated with users
     transactions = Transaction.objects.filter(user=request.user)
