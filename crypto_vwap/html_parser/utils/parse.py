@@ -3,11 +3,11 @@ from bs4 import BeautifulSoup
 
 
 def parse_html_to_csv(html_file_path, csv_file_path):
-    with open(html_file_path, 'r', encoding='windows-1252') as html_file:
+    with open(html_file_path, 'r') as html_file:
         soup = BeautifulSoup(html_file, 'html.parser')
         table = soup.find('table')
 
-        with open(csv_file_path, 'w', newline='', encoding='windows-1252') as csv_file:
+        with open(csv_file_path, 'w', newline='') as csv_file:
             writer = csv.writer(csv_file)
             # Write header row
             header_row = [th.text for th in table.find_all('th')]
