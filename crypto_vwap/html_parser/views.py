@@ -80,17 +80,18 @@ def upload_csv_file(request):
 
 
 def modify_csv_file(csv_file):
-    # Function to split data in the 'filled' column and add 'asset' column
-    def split_filled_column(data):
+    # Function to split data in the 'quantity' column and add 'asset' column
+    def split_quantity_column(data):
         parts = data.split()
         if parts:  # Check if parts is not empty
-            filled = float(parts[0])  # Assume the first part is always numeric
+            # Assume the first part is always numeric
+            quantity = float(parts[0])
             # Join the remaining parts as asset
             asset = ''.join(parts[1:]) if len(parts) > 1 else ''
         else:
-            filled = ''  # Default value if parts is empty
+            quantity = ''  # Default value if parts is empty
             asset = ''
-        return filled, asset
+        return quantity, asset
 
     # Function to remove 'usdt' from the columns
     def remove_usdt(data):
@@ -99,8 +100,8 @@ def modify_csv_file(csv_file):
     # List to store modified rows
     modified_rows = []
 
-    # Open the CSV file for reading
-    with open(csv_file, 'r', newline='') as infile:
+    # Open the CSV file for reading and writing
+    with open(csv_file, 'r', newline='') as infile, open('temp.csv', 'w', newline='') as outfile:
         reader = csv.DictReader(infile)
         # Convert fieldnames to list for easier manipulation
         fieldnames = list(reader.fieldnames)
@@ -109,33 +110,32 @@ def modify_csv_file(csv_file):
         # Insert 'Asset' column after 'Type' column
         fieldnames.insert(type_index + 1, 'Asset')
 
-        # Process each row in the CSV file
-        for row in reader:
-            # Remove commas from specified numeric columns
-            for column in ['Realized Profit', 'Volume', 'Filled', 'Average']:
-                if column in row:
-                    row[column] = row[column].replace(',', '')
-
-            filled, asset = split_filled_column(row['Filled'])
-            # Update the 'filled' column with the numeric part
-            row['Filled'] = filled
-            row['Asset'] = asset  # Add the 'asset' column with the string part
-
-            # Remove 'usdt' from 'Fees' and 'Realized Profit' columns
-            row['Fees'] = remove_usdt(row['Fees'])
-            row['Realized Profit'] = remove_usdt(row['Realized Profit'])
-            # Remove 'usdt' from volume column
-            row['Volume'] = remove_usdt(row['Volume'])
-
-            modified_rows.append(row)
-
-    # Open the temporary CSV file for writing
-    with open('temp.csv', 'w', newline='') as outfile:
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
         writer.writeheader()  # Write the header row
 
-        # Write the modified rows to the temporary CSV file
-        for row in modified_rows:
+        # Process each row in the CSV file
+        for row in reader:
+            # Remove commas from specified numeric columns
+            for column in ['Realized Profit', 'Volume', 'Quantity', 'Average']:
+                if column in row:
+                    row[column] = row[column].replace(',', '')
+
+            # Check if 'Quantity' column exists in the row
+            if 'Quantity' in row:
+                quantity, asset = split_quantity_column(row['Quantity'])
+                # Update the 'quantity' column with the numeric part
+                row['Quantity'] = quantity
+                # Add the 'asset' column with the string part
+                row['Asset'] = asset
+
+            # Remove 'usdt' from 'Fees' and 'Realized Profit' columns
+            row['Fee'] = remove_usdt(row.get('Fee', ''))
+            row['Realized Profit'] = remove_usdt(
+                row.get('Realized Profit', ''))
+            # Remove 'usdt' from volume column
+            row['Volume'] = remove_usdt(row.get('Volume', ''))
+
+            modified_rows.append(row)
             writer.writerow(row)
 
     # Replace the original CSV file with the modified one
