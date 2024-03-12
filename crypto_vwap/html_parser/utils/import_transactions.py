@@ -29,8 +29,8 @@ def import_transactions_from_csv(csv_file_path, user):
                 type=row['Type'],
                 asset=row['Asset'],
                 average=float(row['Average']),
-                filled=float(row['Filled']),
-                fees=float(row['Fees']),
+                quantity=float(row['Quantity']),
+                fee=float(row['Fee']),
                 realized_profit=float(row['Realized Profit']),
                 volume=float(row['Volume']),
             )
