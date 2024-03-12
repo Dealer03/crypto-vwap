@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 
 def parse_html_to_csv(html_file_path, csv_file_path):
-    with open(html_file_path, 'r', encoding='utf-8') as html_file:
+    with open(html_file_path, 'r', encoding='ANSI') as html_file:
         soup = BeautifulSoup(html_file, 'html.parser')
         table = soup.find('table')
 
