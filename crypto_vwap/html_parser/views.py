@@ -26,9 +26,9 @@ def upload_html_file(request):
         if form.is_valid():
             # Process the uploaded file
             uploaded_file = request.FILES['file']
-            file_path = 'temp.html'
+            html_file_path = 'temp.html'
             # Save the uploaded file temporarily with .html extension
-            with open(file_path, 'wb+') as destination:
+            with open(html_file_path, 'wb+') as destination:
                 for chunk in uploaded_file.chunks():
                     destination.write(chunk)
 
