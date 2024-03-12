@@ -6,7 +6,7 @@ from ..models import Transaction
 def import_transactions_from_csv(csv_file_path, user):
     try:
         # Read the CSV file using pandas
-        df = pd.read_csv(csv_file_path, encoding='ANSI')
+        df = pd.read_csv(csv_file_path)
 
         # Iterate over rows and save transactions
         for index, row in df.iterrows():

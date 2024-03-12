@@ -29,11 +29,11 @@ def dashboard(request):
     asset_labels = []
     asset_values = []
     total_portfolio_value = sum(
-        transaction.filled * transaction.average for transaction in user_transactions)
+        transaction.quantity * transaction.average for transaction in user_transactions)
     for transaction in user_transactions:
         asset_labels.append(transaction.asset)
         # Calculate percentage
-        asset_values.append(transaction.filled *
+        asset_values.append(transaction.quantity *
                             transaction.average / total_portfolio_value * 100)
 
      # Create the pie chart
@@ -217,8 +217,8 @@ def remove_duplicate_transactions(request):
                 transaction.date,
                 transaction.asset,
                 transaction.average,
-                transaction.filled,
-                transaction.fees
+                transaction.quantity,
+                transaction.fee
             )
 
             # Check if this transaction is a duplicate
@@ -262,7 +262,7 @@ def export_transactions_csv(request):
 
     writer = csv.writer(response)
     writer.writerow(['Date', 'Side', 'Asset', 'Average',
-                    'Filled', 'Fees', 'Realized Profit', 'Volume'])
+                    'Quantity', 'Fee', 'Realized Profit', 'Volume'])
 
     writer.writerow([])
 
@@ -274,8 +274,8 @@ def export_transactions_csv(request):
             transaction.side,
             transaction.asset,
             transaction.average,
-            transaction.filled,
-            transaction.fees,
+            transaction.quantity,
+            transaction.fee,
             transaction.realized_profit,
             transaction.volume,
         ])
